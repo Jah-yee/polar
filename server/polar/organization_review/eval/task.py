@@ -66,27 +66,13 @@ def create_review_task(
     """Create a task function for the eval.
 
     Args:
-        model: Override the model (uses settings.OPENAI_MODEL if None)
+        model: Override the model (uses settings.PYDANTIC_AI_GATEWAY_MODEL if None)
         context: Review context to use
     """
-    from pydantic_ai import Agent
-    from pydantic_ai.models.openai import OpenAIChatModel
-    from pydantic_ai.providers.openai import OpenAIProvider
 
-    from polar.config import settings
-    from polar.organization_review.analyzer import SYSTEM_PROMPT, ReviewAnalyzer
-    from polar.organization_review.schemas import ReviewAgentReport
+    from polar.organization_review.analyzer import ReviewAnalyzer
 
-    analyzer = ReviewAnalyzer()
-
-    if model:
-        provider = OpenAIProvider(api_key=settings.OPENAI_API_KEY)
-        analyzer.model = OpenAIChatModel(model, provider=provider)
-        analyzer.agent = Agent(
-            analyzer.model,
-            output_type=ReviewAgentReport,
-            system_prompt=SYSTEM_PROMPT,
-        )
+    analyzer = ReviewAnalyzer(model)
 
     async def review_task(review_input: ReviewInput) -> str:
         snapshot = build_snapshot(review_input)
@@ -94,7 +80,7 @@ def create_review_task(
         return _VERDICT_MAP.get(report.verdict.value, report.verdict.value)
 
     # Set the name for pydantic-evals reporting
-    model_name = model or settings.OPENAI_MODEL
+    model_name = analyzer.model_name
     review_task.__name__ = f"review_{model_name}"
     review_task.__qualname__ = f"review_{model_name}"
 

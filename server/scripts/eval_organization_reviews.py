@@ -20,7 +20,7 @@ Usage:
     uv run python -m scripts.eval_organization_reviews run --dataset eval_dataset.json
 
     # Run eval with a different model
-    uv run python -m scripts.eval_organization_reviews run --dataset eval_dataset.json --model gpt-4o
+    uv run python -m scripts.eval_organization_reviews run --dataset eval_dataset.json --model openai:gpt-4o
 
     # Run eval with lower concurrency
     uv run python -m scripts.eval_organization_reviews run --dataset eval_dataset.json --concurrency 3
@@ -176,7 +176,9 @@ def main() -> None:
         "--dataset", "-d", required=True, help="Path to dataset JSON/YAML"
     )
     run_parser.add_argument(
-        "--model", "-m", help="Model to use (default: settings.OPENAI_MODEL)"
+        "--model",
+        "-m",
+        help="Model to use (default: settings.PYDANTIC_AI_GATEWAY_MODEL)",
     )
     run_parser.add_argument(
         "--concurrency",
