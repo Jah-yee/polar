@@ -180,10 +180,6 @@ async def run_review_agent(
                     verdict=report.verdict.value,
                 )
 
-        # For SETUP_COMPLETE context: log the flagged verdict.
-        # Do NOT set the org to INITIAL_REVIEW here — that must only happen
-        # when check_review_threshold fires (on the first sale), so the
-        # organization_under_review task creates the Plain thread.
         if review_context == ReviewContext.SETUP_COMPLETE:
             if report.verdict == ReviewVerdict.DENY:
                 await review_repository.record_agent_decision(
