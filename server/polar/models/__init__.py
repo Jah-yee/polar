@@ -36,6 +36,7 @@ from .member import Member, MemberRole
 from .member_session import MemberSession
 from .meter import Meter
 from .meter_event import MeterEvent
+from .metric_dashboard import MetricDashboard
 from .metric_definition import MetricDefinition
 from .notification import Notification
 from .notification_recipient import NotificationRecipient
@@ -132,6 +133,7 @@ __all__ = [
     "MemberSession",
     "Meter",
     "MeterEvent",
+    "MetricDashboard",
     "MetricDefinition",
     "Model",
     "Notification",
